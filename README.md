@@ -1,225 +1,143 @@
-Chess Game – Client/Server Architecture
-The game has been adapted to work with a client-server architecture, allowing two players to play from different computers or terminals.
-Solution Structure
-New Files:
+# Chess Game - Client/Server Architecture
 
+המשחק הוסב לעבוד עם ארכיטקטורה של קליינט-סרבר, כך ששני שחקנים יכולים לשחק ביחד ממחשבים שונים או מטרמינלים שונים.
 
-server.py – main server that manages the game
+## מבנה הפתרון
 
+### קבצים חדשים:
+- `server.py` - השרת המרכזי שמנהל את המשחק
+- `client.py` - הלקוח שמתחבר לשרת  
+- `server_game.py` - לוגיקת המשחק בצד השרת (ללא גרפיקה)
+- `run.py` - סקריפט הפעלה מהיר
+- `requirements.txt` - חבילות הנדרשות
 
-client.py – client that connects to the server
+### התלות:
+- `websockets` - תקשורת בין קליינט לשרת
+- `keyboard` - טיפול בקלט מקלדת
+- `opencv-python` + `numpy` - עבור הגרפיקה הקיימת
 
+## איך להפעיל
 
-server_game.py – game logic on the server side (no graphics)
-
-
-run.py – quick start script
-
-
-requirements.txt – required packages
-
-
-Dependencies:
-
-
-websockets – client-server communication
-
-
-keyboard – keyboard input handling
-
-
-opencv-python + numpy – for existing graphics
-
-
-
-How to Run
-1. Install dependencies:
+### 1. התקנת חבילות:
+```bash
 pip install -r requirements.txt
+```
 
-Or:
+או:
+```bash
 python run.py install
+```
 
-2. Start the server:
+### 2. הפעלת השרת:
+```bash
 python run.py server
+```
 
-Or directly:
+או ישירות:
+```bash
 python server.py
+```
 
-The server will run on localhost:8765 and wait for two clients.
-3. Start clients:
-Terminal 2 (Player 1 – with graphics):
+השרת ירוץ על `localhost:8765` ויחכה לשני לקוחות.
+
+### 3. הפעלת לקוחות:
+
+**טרמינל 2 (שחקן 1 - עם גרפיקה):**
+```bash
 python run.py client
+```
 
-Terminal 3 (Player 2 – with graphics):
+**טרמינל 3 (שחקן 2 - עם גרפיקה):**
+```bash
 python run.py client
+```
 
-Alternatively – console-only client (no graphics):
+**לחילופין - לקוח במסוף (ללא גרפיקה):**
+```bash
 python run.py console
-
-
-How It Works
-Server:
-
-
-Waits for two player connections
-
-
-Initializes a new game when both players are connected
-
-
-Receives commands from clients and validates them
-
-
-Sends updates to both clients with the current board state
-
-
-Client:
-
-
-Connects to the server via WebSocket
-
-
-Displays the full graphical board (like the original game)
-
-
-Receives user input (arrows + Enter)
-
-
-Sends commands to the server and updates the display
-
-
-Client Types:
-
-
-python run.py client – full graphics client
-
-
-python run.py console – simple console client (text only)
-
-
-
-Controls
-Player 1 (White):
-
-
-Arrows – navigate the board
-
-
-Enter – select piece / make move
-
-
-ESC – exit
-
-
-Player 2 (Black):
-
-
-WASD – navigate the board
-
-
-F – select piece / make move
-
-
-ESC – exit
-
-
-
-Display
-Graphical client (python run.py client):
-
-
-Full graphical chess board (like the original game)
-
-
-Realistic chess pieces with animations
-
-
-Nice background and professional design
-
-
-Green highlight for selection
-
-
-Yellow highlight for selected piece
-
-
-Console client (python run.py console):
-
-
-Simple text-based chess board
-
-
-Current cursor position shown as []
-
-
-Selected piece shown as *piece*
-
-
-Displays player turn and game status
-
-
-
-Changes from Original Code
-
-
-Logic separation: Game logic moved to ServerGame without graphics
-
-
-Network communication: WebSocket communication added between client and server
-
-
-Simplified interface: Console client displays simple board instead of full graphics
-
-
-Central game state: Server maintains the real game state
-
-
-
-Possible Extensions
-
-
- Add full graphics for the client
-
-
- Advanced move validation
-
-
- Detect check/checkmate
-
-
- Save/load games
-
-
- Support more than two players (multiple games)
-
-
- Web-based interface instead of console
-
-
-
-Common Issues
-
-
-Server does not start – check if port 8765 is free
-
-
-Client cannot connect – ensure the server is running
-
-
-Input issues – ensure the keyboard package is installed with proper permissions
-
-
-
-Message Structure
-Client → Server:
+```
+
+## איך זה עובד
+
+### השרת:
+1. מחכה לחיבור של שני שחקנים
+2. מאתחל משחק חדש כשמתחברים שני שחקנים
+3. מקבל פקודות מהלקוחות ומבדק חוקיותן
+4. שולח עדכונים לשני הלקוחות על מצב הלוח
+
+### הלקוח:
+1. מתחבר לשרת דרך WebSocket
+2. **מציג את הלוח הגרפי המלא** (כמו במשחק המקורי)
+3. מקבל קלט מהמשתמש (חיצים + Enter)
+4. שולח פקודות לשרת ומעדכן התצוגה
+
+### סוגי לקוחות:
+- **`python run.py client`** - לקוח עם גרפיקה מלאה
+- **`python run.py console`** - לקוח פשוט במסוף (טקסט בלבד)
+
+## בקרות
+
+### שחקן 1 (לבן):
+- **חיצים**: ניווט על הלוח
+- **Enter**: בחירת כלי / ביצוע מהלך
+- **ESC**: יציאה
+
+### שחקן 2 (שחור):
+- **WASD**: ניווט על הלוח
+- **F**: בחירת כלי / ביצוע מהלך
+- **ESC**: יציאה
+
+## התצוגה
+
+### לקוח גרפי (`python run.py client`):
+- **לוח שח מלא וגרפי** (כמו במשחק המקורי)
+- **כלי שח אמיתיים** עם אנימציות
+- **רקע יפה** ועיצוב מקצועי
+- סמן ירוק לבחירת מיקום
+- סימון צהוב לכלי שנבחר
+
+### לקוח מסוף (`python run.py console`):
+- לוח שח פשוט במסוף (טקסט)
+- מיקום הסמן הנוכחי `[]`
+- כלי נבחר `*כלי*`
+- מידע על תור השחקן ומצב המשחק
+
+## שינויים מהקוד המקורי
+
+1. **הפרדת לוגיקה**: הלוגיקה של המשחק הועברה ל-`ServerGame` ללא גרפיקה
+2. **תקשורת רשת**: נוספה תקשורת WebSocket בין קליינט לשרת
+3. **ממשק פשוט**: הלקוח מציג לוח פשוט במסוף במקום הגרפיקה המלאה
+4. **מצב משחק מרכזי**: השרת שומר על מצב המשחק האמיתי
+
+## הרחבות אפשריות
+
+- [ ] הוספת גרפיקה מלאה ללקוח
+- [ ] בדיקת חוקיות מהלכים מתקדמת יותר
+- [ ] זיהוי מצבי שח/מט
+- [ ] שמירה וטעינה של משחקים
+- [ ] תמיכה ביותר משני שחקנים (משחקים מרובים)
+- [ ] ממשק ווב במקום מסוף
+
+## בעיות נפוצות
+
+1. **שרת לא מתחיל**: בדוק שהפורט 8765 פנוי
+2. **לקוח לא מתחבר**: בדוק שהשרת רץ ופעיל
+3. **בעיות קלט**: בדוק שהחבילה `keyboard` מותקנת עם הרשאות מתאימות
+
+## מבנה ההודעות
+
+### לקוח ← שרת:
+```json
 {
   "type": "move",
   "piece_id": "PW1",
   "from": [6, 0],
   "to": [4, 0]
 }
+```
 
-Server → Client:
+### שרת → לקוח:
+```json
 {
   "type": "game_state",
   "state": {
@@ -228,4 +146,4 @@ Server → Client:
     "game_status": "playing"
   }
 }
-
+```
